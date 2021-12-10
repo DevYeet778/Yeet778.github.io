@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html> 
+ <head>
+    <title>Processing.JS inside Webpages: Template</title> 
+</head>
+ <body>
+    <p align="center"> 
+      <canvas id="mycanvas"></canvas> 
+    </p>
+ </body>
+ <script src="https://cdn.jsdelivr.net/processing.js/1.4.8/processing.min.js"></script> 
+ 
+ <script>
+    var sketchProc = function(processingInstance) {
+     with (processingInstance) {
+        size(1500, 925); 
+        frameRate(60);
+        // ProgramCodeGoesHere
+        var keys = [];
+keyPressed = function() {
+    keys[keyCode] = true;
+};
+keyReleased = function() {
+    keys[keyCode] = false;
+};
+
+//handles the mouse status
+var clicked = false;
+mouseClicked = function() {
+    clicked = true;
+};
+
+//the player
+var player = {
+    x: 300,
+    y: 300,
+    w: 50,
+    h: 50,
+    speed: 15,
+    color: color(247, 86, 97),
+    angle: 0
+};
+
+//the width and height of our world
+var world = {
+    w: 5000,
+    h: 5000
+};
+
+//our camera
+var cam = {
+    x: 0,
+    y: 0
+};
+
+//array to hold the bullets
+var bullets = [];
+
+//draw a grid
+var grid = function() {
+    noFill();
+    stroke(50);
+    
+    for(var x = 0; x < world.w; x+= 100) {
+        for(var y = 0; y < world.h; y+= 100) {
+            fill(200, 200, 200);
+            rect(x, y, 100, 100);
+        }
+    }
+};
+
+var drawPlayer = function() {
+    player.angle = atan2((mouseY - cam.y) - player.y, (mouseX - cam.x) - player.x);
+    if(keys[UP] || keys[87]) {
+        player.x = constrain(player.x + cos(player.angle) * player.speed, 0, world.w - player.w);
+        player.y = constrain(player.y + sin(player.angle) * player.speed, 0, world.h - player.h);
+    }
+    
+    pushMatrix();
+        translate(player.x + player.w / 2, player.y + player.h / 2);
+        rotate(player.angle);
+        
+        noStroke();
+        fill(player.color);
+        rect(-player.w / 2, -player.h / 2, player.w, player.h);
+        fill(40);
+        ellipse(player.w * 0.3, -player.h * 0.2, player.w * 0.2, player.h * 0.2);
+        ellipse(player.w * 0.3,  player.h * 0.2, player.w * 0.2, player.h * 0.2);
+    popMatrix();
+};
+
+var fireBullets = function() {
+    noStroke();
+    fill(40);
+    
+    for(var i = bullets.length - 1; i >= 0; i--) {
+        var bullet = bullets[i];
+        
+        ellipse(bullet.x, bullet.y, bullet.diameter, bullet.diameter);
+        
+        bullet.x+= bullet.vx * bullet.speed;
+        bullet.y+= bullet.vy * bullet.speed;
+                if(bullet.x <= 0 || bullet.x >= world.w || bullet.y <= 0 || bullet.y >= world.h) {
+            bullets.splice(i, 1);
+        }
+    }
+};
+
+draw = function() {
+    background(255);
+    cam.x = lerp(cam.x, width / 2 - player.x - player.w / 2, 0.1) | 0;
+    cam.y = lerp(cam.y, height / 2 - player.y - player.h / 2, 0.1) | 0;
+    
+    pushMatrix();
+        translate(cam.x, cam.y);
+        grid();
+        fireBullets();
+        drawPlayer();
+        if(clicked) {
+            bullets.push({
+                x: player.x + player.w / 2,
+                y: player.y + player.h / 2,
+                vx: cos(player.angle),
+                vy: sin(player.angle),
+                diameter: player.w * 0.2,
+                speed: player.speed * 2
+            });
+        }       
+    popMatrix();
+    clicked = false;
+
+    
+};
+        
+
+
+
+
+
+
+
+
+
+     }
+    }
+    var canvas = document.getElementById("mycanvas"); 
+    var processingInstance = new Processing(canvas, sketchProc); 
+ </script>
+
+</html>

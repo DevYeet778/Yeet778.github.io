@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html> 
+ <head>
+    <title>Processing.JS inside Webpages: Template</title> 
+</head>
+ <body>
+    <p align="center"> 
+      <canvas id="mycanvas"></canvas> 
+    </p>
+ </body>
+ <script src="https://cdn.jsdelivr.net/processing.js/1.4.8/processing.min.js"></script> 
+ <script>
+    var sketchProc = function(processingInstance) {
+     with (processingInstance) {
+        size(1900, 900); 
+        frameRate(60);
+        // ProgramCodeGoesHere
+var num = 1;
+var Button = function(config){
+        this.shape = config.shape || "";
+        this.x = config.x || 0;
+        this.y = config.y || 0;
+        this.width = config.w || 0;
+        this.height = config.h || 0;
+        this.radius = config.r || 0;
+        this.label = config.label || "";
+        this.textsize = config.textsize || 0;
+        this.textadjustx = config.textx || 0;
+        this.textadjusty = config.texty || 0;
+        this.textColor = config.textColor || color(0, 0, 0);
+        this.btnColor = config.btnColor || color(255, 255, 255);
+        this.btnOverColor = config.btnOverColor || this.btnColor;
+        this.btnEdgeColor = config.btnEdgeColor || color(0, 0, 0);
+        this.boarderWidth = config.boarderWidth || 0;
+        this.onClick = config.onClick || function(){};
+};
+Button.prototype.isMouseInside = function() {
+    if(this.shape === "rect"){
+        return mouseX > this.x && mouseX < (this.x + this.width) && mouseY > this.y &&         mouseY < (this.y + this.height);
+    } else if(this.shape === "ellipse"){
+        return dist(mouseX, mouseY, this.x, this.y) <= this.radius/2;
+    }
+};
+Button.prototype.draw = function() {
+    pushMatrix();
+        if(this.shape === "rect"){
+        if(this.isMouseInside()){fill(this.btnOverColor);} else            {fill(this.btnColor);}
+        stroke(this.btnEdgeColor);
+        strokeWeight(this.boarderWidth);
+        rect(this.x, this.y, this.width, this.height, this.radius);
+        fill(this.textColor);
+        textSize(this.textsize);
+        text(this.label, this.x + (this.width/2) + this.textadjustx         , this.y + (this.height/2) + this.textadjusty);
+        } else if(this.shape === "ellipse"){
+        if(this.isMouseInside()){fill(this.btnOverColor);} else            {fill(this.btnColor);}
+        stroke(this.btnEdgeColor);
+        ellipse(this.x, this.y, this.radius, this.radius);
+        fill(this.textColor);
+        textSize(this.textsize);
+        text(this.label, this.x + this.textadjustx, this.y + this          .textadjusty);
+    }
+    popMatrix();
+};
+Button.prototype.handleMouseClick = function() {
+    if (this.isMouseInside()) {
+        this.onClick();
+    }
+}; 
+mouseClicked = function(){
+    btn6.handleMouseClick();
+    btn7.handleMouseClick();
+    btn8.handleMouseClick();
+    btn9.handleMouseClick();
+    btn10.handleMouseClick();
+    btn11.handleMouseClick();
+};
+var Spinner = function(config){
+    this.a = config.a;
+    this.x = config.x;
+    this.y = config.y;
+    this.r = config.r;
+    this.s = config.s;
+    this.c = config.c;
+};
+Spinner.prototype.draw = function() {
+    fill(this.c);
+    this.theta = (180 / Math.PI) * num;
+    if(this.a === 1 || this.a === 2 || this.a === 3 || this.a === 4 || this.a === 5 || this.a === 6|| this.a === 7 || this.a === 8){
+    this.cx1 = this.r * Math.cos(this.theta);
+    this.cy1 = this.r * Math.sin(this.theta);
+    ellipse(this.x + this.cx1, this.y + this.cy1, this.s, this.s);
+    }
+    if(this.a === 2 || this.a === 3 || this.a === 4 || this.a === 8){
+    this.cx2 = -this.r * Math.cos(this.theta);
+    this.cy2 = -this.r * Math.sin(this.theta);
+    ellipse(this.x + this.cx2, this.y + this.cy2, this.s, this.s);
+    }
+    if(this.a === 3 || this.a === 4 || this.a === 8){
+    this.cx3 = -this.r * Math.sin(this.theta);
+    this.cy3 = this.r * Math.cos(this.theta);
+    ellipse(this.x + this.cx3, this.y + this.cy3, this.s, this.s);
+    }
+    if(this.a === 4 || this.a === 8){
+    this.cx4 = this.r * Math.sin(this.theta);
+    this.cy4 = -this.r * Math.cos(this.theta);
+    ellipse(this.x + this.cx4, this.y + this.cy4, this.s, this.s);
+    }
+    if(this.a === 8){
+    this.cx5 = this.r * Math.cos(this.theta - (180 / Math.PI) * sqrt(3) * 3);
+    this.cy5 = this.r * Math.sin(this.theta - (180 / Math.PI) * sqrt(3) * 3);
+    ellipse(this.x + this.cx5, this.y + this.cy5, this.s, this.s);
+    }
+    if(this.a === 8){
+    this.cx6 = this.r * Math.cos(this.theta - (180/Math.PI) * sqrt(3) * -3);
+    this.cy6 = this.r * Math.sin(this.theta - (180/Math.PI) * sqrt(3) * -3);
+    ellipse(this.x + this.cx6, this.y + this.cy6, this.s, this.s);
+    }
+    if(this.a === 8){
+    this.cx7 = -1 * this.r * Math.cos(this.theta - (180/Math.PI) * sqrt(3) * -3);
+    this.cy7 = -1 * this.r * Math.sin(this.theta - (180/Math.PI) * sqrt(3) * -3);
+    ellipse(this.x + this.cx7, this.y + this.cy7, this.s, this.s);
+    }
+    if(this.a === 8){
+    this.cx8 = this.r * -1 * Math.cos(this.theta - (180/Math.PI) * sqrt(3) * 3);
+    this.cy8 = this.r * -1 * Math.sin(this.theta - (180/Math.PI) * sqrt(3) * 3);
+    ellipse(this.x + this.cx8, this.y + this.cy8, this.s, this.s);
+    }
+};
+
+var btn6 = new Button({
+    shape: "rect",
+    x: 375,
+    y: 50,
+    w: 550,
+    h: 400,
+    r: 25,
+    label: "Youtube",
+    textsize: 45,
+    textx: -90,
+    texty: 14,
+    textColor: color(255, 255, 255),
+    btnColor: color(255, 255, 255, 0),
+    btnOverColor: color(255, 255, 255, 150),
+    btnEdgeColor: color(255, 255, 255),
+    boarderWidth: 5,
+    onClick: function(){ window.open("https://www.youtube.com/channel/UCSvOdBJgMnTYsK-cZIGZSYQ", "_blank");}
+});
+var btn7 = new Button({
+    shape: "rect",
+    x: 975,
+    y: 50,
+    w: 550,
+    h: 400,
+    r: 25,
+    label: "Discord",
+    textsize: 45,
+    textx: -82,
+    texty: 14,
+    textColor: color(255, 255, 255),
+    btnColor: color(255, 255, 255, 0),
+    btnOverColor: color(255, 255, 255, 150),
+    btnEdgeColor: color(255, 255, 255),
+    boarderWidth: 5,
+    onClick: function(){ window.open("https://discord.gg/aPfSfEat", "_blank");}
+});
+var btn8 = new Button({
+    shape: "rect",
+    x: 375,
+    y: 475,
+    w: 550,
+    h: 400,
+    r: 25,
+    label: "Game",
+    textsize: 45,
+    textx: -62,
+    texty: 14,
+    textColor: color(255, 255, 255),
+    btnColor: color(255, 255, 255, 0),
+    btnOverColor: color(255, 255, 255, 150),
+    btnEdgeColor: color(255, 255, 255),
+    boarderWidth: 5,
+    onClick: function(){ window.open("file:///C:/Users/Kushal/Downloads/processing-js-1.6.6/Gaem.html", "_blank");}
+});
+var btn9 = new Button({
+    shape: "rect",
+    x: 975,
+    y: 475,
+    w: 550,
+    h: 400,
+    r: 25,
+    label: "Coming Soon",
+    textsize: 45,
+    textx: -135,
+    texty: 14,
+    textColor: color(255, 255, 255),
+    btnColor: color(255, 255, 255, 0),
+    btnOverColor: color(255, 255, 255, 150),
+    btnEdgeColor: color(255, 255, 255),
+    boarderWidth: 5,
+    onClick: function(){ window.open("https://www.youtube.com/channel/UCSvOdBJgMnTYsK-cZIGZSYQ", "_blank");}
+});
+var btn10 = new Button({
+    shape: "rect",
+    x: 1550,
+    y: 50,
+    w: 325,
+    h: 825,
+    r: 25,
+    label: "Fan-art",
+    textsize: 45,
+    textx: -75,
+    texty: 14,
+    textColor: color(255, 255, 255),
+    btnColor: color(255, 255, 255, 0),
+    btnOverColor: color(255, 255, 255, 150),
+    btnEdgeColor: color(255, 255, 255),
+    boarderWidth: 5,
+    onClick: function(){ window.open("https://www.youtube.com/channel/UCSvOdBJgMnTYsK-cZIGZSYQ", "_blank");}
+});
+var btn11 = new Button({
+    shape: "rect",
+    x: 25,
+    y: 50,
+    w: 325,
+    h: 825,
+    r: 25,
+    label: "About Me",
+    textsize: 45,
+    textx: -100,
+    texty: 14,
+    textColor: color(255, 255, 255),
+    btnColor: color(255, 255, 255, 0),
+    btnOverColor: color(255, 255, 255, 150),
+    btnEdgeColor: color(255, 255, 255),
+    boarderWidth: 5,
+    onClick: function(){ window.open("file:///C:/Users/Kushal/Downloads/processing-js-1.6.6/Gaem.html", "_blank");}
+});
+
+draw = function(){
+    background(100, 100, 100);
+    num += 0.001 * 0.1;
+    btn6.draw();
+    btn7.draw();
+    btn8.draw();
+    btn9.draw();
+    btn10.draw();
+    btn11.draw();
+};
+
+mouseOut = function(){
+    mouseX = 3000;
+    mouseY = 3000;
+};
+
+    }};
+
+    var canvas = document.getElementById("mycanvas"); 
+    var processingInstance = new Processing(canvas, sketchProc); 
+ </script>
+
+</html>
